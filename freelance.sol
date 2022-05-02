@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 contract freelance{
     uint256 public amount;
-    address public owner;
+    address public owner; //Service address
     address public customer;
     address public executor;
     uint256 public dateDeadline;
@@ -21,16 +21,6 @@ contract freelance{
       CONFLICT
     }
     CONTRACT_STATE public contract_state;
-    //0
-    //1
-    //2
-    //3
-    //4
-    //5
-    //6
-    //7
-    //8
-    //9
 
     constructor(uint256 _amount, address _customer, address _executor, uint256 _dateDeadline, uint256 _dateAcceptWork){
         owner = 0x429a41Bf637Ae722380663730F3854Cc96F548D4;
@@ -117,7 +107,7 @@ contract freelance{
         require(block.timestamp <= dateAcceptWork);
         contract_state = CONTRACT_STATE.CANCEL_CUSTOMER;
     }
-    // _increaseDateDeadline измеряется в секундах
+
     function increaseWork(uint256 _increaseDateDeadline) public onlyCustomer{
         require(contract_state == CONTRACT_STATE.WORK);
         if(dateDeadline >= block.timestamp){
@@ -128,7 +118,6 @@ contract freelance{
         }
     }
 
-    //_increaseDateAcceptWork измеряется в секундах
     function increaseAcceptWork(uint256 _increaseDateAcceptWork) public onlyExecutor{
         require(contract_state == CONTRACT_STATE.COMPLITE_EXECUTOR);
         if(dateAcceptWork >= block.timestamp){
@@ -155,41 +144,39 @@ contract freelance{
         contract_state = CONTRACT_STATE.END;
     }
 
-    /* function withdrawlAdmin(uint _value, address _address) public onlyOwner {
-      require(address(this).balance >= _value, "Not enough funds!");
-      payable(_address).transfer(_value);
-    } */
-
     function changeStateToCREATED() public onlyOwner{
+        require(contract_state == CONTRACT_STATE.CONFLICT);
         contract_state = CONTRACT_STATE.CREATED;
     }
 
     function changeStateToWORK() public onlyOwner{
+        require(contract_state == CONTRACT_STATE.CONFLICT);
         contract_state = CONTRACT_STATE.WORK;
     }
 
     function changeStateToCOMPLITE_EXECUTOR() public onlyOwner{
+        require(contract_state == CONTRACT_STATE.CONFLICT);
         contract_state = CONTRACT_STATE.COMPLITE_EXECUTOR;
     }
 
     function changeStateToCOMPLITE_CUSTOMER() public onlyOwner{
+        require(contract_state == CONTRACT_STATE.CONFLICT);
         contract_state = CONTRACT_STATE.COMPLITE_CUSTOMER;
     }
 
     function changeStateToCANCEL_CUSTOMER() public onlyOwner{
+        require(contract_state == CONTRACT_STATE.CONFLICT);
         contract_state = CONTRACT_STATE.CANCEL_CUSTOMER;
     }
 
     function changeStateToCANCEL_EXECUTOR() public onlyOwner{
+        require(contract_state == CONTRACT_STATE.CONFLICT);
         contract_state = CONTRACT_STATE.CANCEL_EXECUTOR;
     }
 
     function changeStateToEND() public onlyOwner{
+        require(contract_state == CONTRACT_STATE.CONFLICT);
         contract_state = CONTRACT_STATE.END;
-    }
-
-    function changeStateToCONFLICT() public onlyOwner{
-        contract_state = CONTRACT_STATE.CONFLICT;
     }
 
 }
